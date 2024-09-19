@@ -2,6 +2,10 @@
 
 A Flutter plugin for accessing TensorFlow Lite API. Supports image classification, object detection ([SSD](https://github.com/tensorflow/models/tree/master/research/object_detection) and [YOLO](https://pjreddie.com/darknet/yolov2/)), [Pix2Pix](https://phillipi.github.io/pix2pix/) and [Deeplab](https://github.com/tensorflow/models/tree/master/research/deeplab) and [PoseNet](https://www.tensorflow.org/lite/models/pose_estimation/overview) on both iOS and Android.
 
+> [!TIP]
+> This is a fork of the [tflite](https://github.com/shaqian/flutter_tflite) package that contains fixes.
+
+
 ### Table of Contents
 
 - [Installation](#Installation)
@@ -15,7 +19,6 @@ A Flutter plugin for accessing TensorFlow Lite API. Supports image classificatio
     - [PoseNet](#PoseNet)
 - [Example](#Example)
     - [Prediction in Static Images](#Prediction-in-Static-Images)
-    - [Real-time Detection](#Real-time-Detection)
 
 ### Breaking changes
 
@@ -59,7 +62,7 @@ Solutions to build errors on iOS:
   However, for early versions of tensorflow the header path is "tensorflow/contrib/lite/kernels".
 
   Use `CONTRIB_PATH` to toggle the path. Uncomment `//#define CONTRIB_PATH` from here:
-  https://github.com/shaqian/flutter_tflite/blob/master/ios/Classes/TflitePlugin.mm#L1
+  https://github.com/sumn2u/flutter_tflite/blob/master/ios/Classes/TflitePlugin.mm#L1
 
 ## Usage
 
@@ -502,11 +505,9 @@ var result = await runPoseNetOnFrame(
 
 ### Prediction in Static Images
 
-  Refer to the [example](https://github.com/shaqian/flutter_tflite/tree/master/example).
+  Refer to the [example](https://github.com/sumn2u/flutter_tflite/tree/master/example).
 
-### Real-time detection
 
-  Refer to [flutter_realtime_Detection](https://github.com/shaqian/flutter_realtime_detection).
 
 ## Run test cases
 
