@@ -486,6 +486,16 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  // Method to capture image from the camera
+Future predictImageCamera() async {
+  var image = await ImagePicker().pickImage(source: ImageSource.camera);
+  if (image == null) return;
+  setState(() {
+    _busy = true;
+  });
+  predictImage(File(image.path));
+}
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -531,14 +541,27 @@ class _MyAppState extends State<MyApp> {
           )
         ],
       ),
-      body: Stack(
+      body: _busy
+        ? Center(child: CircularProgressIndicator())
+        : Stack(
         children: stackChildren,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: predictImagePicker,
-        tooltip: 'Pick Image',
-        child: Icon(Icons.image),
-      ),
+      floatingActionButton: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          onPressed: predictImagePicker, // Existing method for gallery picker
+          tooltip: 'Pick Image from Gallery',
+          child: Icon(Icons.photo_library),
+        ),
+        SizedBox(height: 10),
+        FloatingActionButton(
+          onPressed: predictImageCamera, // New method for camera capture
+          tooltip: 'Capture Image with Camera',
+          child: Icon(Icons.camera_alt),
+        ),
+      ],
+    ),
     );
   }
 }
