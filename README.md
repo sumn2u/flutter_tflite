@@ -6,6 +6,10 @@ A Flutter plugin for accessing TensorFlow Lite API. Supports image classificatio
 > This is a fork of the [tflite](https://github.com/shaqian/flutter_tflite) package that contains fixes.
 
 
+![](sample_images/one.jpg) 
+
+![](sample_images/two.jpg) 
+
 ### Table of Contents
 
 - [Installation](#Installation)
@@ -19,6 +23,8 @@ A Flutter plugin for accessing TensorFlow Lite API. Supports image classificatio
     - [PoseNet](#PoseNet)
 - [Example](#Example)
     - [Prediction in Static Images](#Prediction-in-Static-Images)
+
+
 
 ### Breaking changes
 
@@ -34,7 +40,14 @@ A Flutter plugin for accessing TensorFlow Lite API. Supports image classificatio
 
 ## Installation
 
-Add `tflite` as a [dependency in your pubspec.yaml file](https://flutter.io/using-packages/).
+Add `tflite` as a dependency in your pubspec.yaml file.
+
+```yaml
+tflite:
+    git:
+      url: https://github.com/sumn2u/flutter_tflite.git
+      ref: main
+```
 
 ### Android
 

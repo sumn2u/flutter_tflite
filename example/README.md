@@ -1,15 +1,15 @@
-# tflite_example
+# Tflite Example Application
 
-Use tflite plugin to run model on images. The image is captured by camera or selected from gallery (with the help of [image_picker](https://pub.dartlang.org/packages/image_picker) plugin).
+An example application that shows how to use  Tflite plugin to run model on images. Here images are capture by camera or is selected from gallery.
 
-![](sample_images/andriod_example.png) 
+![](../sample_images/one.jpg) 
 
-![](sample_images/ios_example.png) 
+![](../sample_images/two.jpg) 
 
 ## Prerequisites
 
-Create a `assets` folder. From https://github.com/shaqian/flutter_tflite/tree/master/example/assets
-dowload the following files and place them in `assets` folder.
+The `assets` folder contains various models tflite file.
+
  - mobilenet_v1_1.0_224.tflite
  - mobilenet_v1_1.0_224.txt
  - ssd_mobilenet.tflite
@@ -31,7 +31,3 @@ flutter packages get
 ```
 flutter run
 ```
-
-## Caveat
-
-```recognizeImageBinary(image)``` (sample code for ```runModelOnBinary```) is slow on iOS when decoding image due to a [known issue](https://github.com/brendan-duncan/image/issues/55) with image package.

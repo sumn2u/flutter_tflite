@@ -11,11 +11,11 @@ import 'package:image_picker/image_picker.dart';
 
 void main() => runApp(new App());
 
+const String deeplab = "DeepLab";
 const String mobile = "MobileNet";
+const String posenet = "PoseNet";
 const String ssd = "SSD MobileNet";
 const String yolo = "Tiny YOLOv2";
-const String deeplab = "DeepLab";
-const String posenet = "PoseNet";
 
 class App extends StatelessWidget {
   @override
@@ -371,71 +371,149 @@ class _MyAppState extends State<MyApp> {
     List<Widget> stackChildren = [];
 
     if (_model == deeplab && _recognitions != null) {
-      stackChildren.add(Positioned(
-        top: 0.0,
-        left: 0.0,
-        width: size.width,
-        child: _image == null
-            ? Text('No image selected.')
-            : Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        alignment: Alignment.topCenter,
-                        image: MemoryImage(Uint8List.fromList(_recognitions!.cast())),
-                        fit: BoxFit.fill)),
-                child: Opacity(opacity: 0.3, child: Image.file(_image!))),
-      ));
-    } else {
-      stackChildren.add(Positioned(
-        top: 0.0,
-        left: 0.0,
-        width: size.width,
-        child: _image == null ? Text('No image selected.') : Image.file(_image!),
-      ));
-    }
+    stackChildren.add(Positioned(
+      top: 0.0,
+      left: 0.0,
+      width: size.width,
+      child: _image == null
+          ? Center(
+              child: Text(
+                'No image selected.',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.redAccent,
+                  fontStyle: FontStyle.italic,
+                ),
+              )
+            )
+          : Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent, // Border around the container
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(10.0),
+                image: DecorationImage(
+                  alignment: Alignment.topCenter,
+                  image: MemoryImage(Uint8List.fromList(_recognitions!.cast())),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              child: Opacity(
+                opacity: 0.3,
+                child: Image.file(_image!),
+              ),
+            ),
+    ));
+  } else {
+    stackChildren.add(Positioned(
+      top: 0.0,
+      left: 0.0,
+      width: size.width,
+      child: _image == null
+          ? 
+          Center(
+           child: Padding(
+                padding: EdgeInsets.only(top: size.height * 0.4),
+            child: Text(
+              'No image selected.',
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.grey,
+                fontStyle: FontStyle.italic,
+              ),
+            )
+          )
+          )
+          : Image.file(
+              _image!,
+              fit: BoxFit.cover, // Adjust the image to cover the width
+            ),
+    ));
+  }
 
-    if (_model == mobile) {
-      stackChildren.add(Center(
-        child: Column(
-          children: _recognitions != null
-              ? _recognitions!.map((res) {
-                  return Text(
+  // Styling the mobile model recognitions text
+  if (_model == mobile) {
+    stackChildren.add(Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center, // Center the content
+        children: _recognitions != null
+            ? _recognitions!.map((res) {
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 5.0),
+                  padding: EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(8.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        offset: Offset(2, 2),
+                      )
+                    ],
+                  ),
+                  child: Text(
                     "${res["index"]} - ${res["label"]}: ${res["confidence"].toStringAsFixed(3)}",
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 20.0,
-                      background: Paint()..color = Colors.white,
+                      fontSize: 18.0,
                     ),
-                  );
-                }).toList()
-              : [],
-        ),
-      ));
-    } else if (_model == ssd || _model == yolo) {
-      stackChildren.addAll(renderBoxes(size));
-    } else if (_model == posenet) {
-      stackChildren.addAll(renderKeypoints(size));
-    }
+                  ),
+                );
+              }).toList()
+            : [],
+      ),
+    ));
+  } else if (_model == ssd || _model == yolo) {
+    // Render bounding boxes for object detection models
+    stackChildren.addAll(renderBoxes(size));
+  } else if (_model == posenet) {
+    // Render keypoints for the posenet model
+    stackChildren.addAll(renderKeypoints(size));
+  }
 
-    if (_busy) {
-      stackChildren.add(const Opacity(
+  // Add a loading indicator with an overlay when busy
+  if (_busy) {
+    stackChildren.add(
+      const Opacity(
         child: ModalBarrier(dismissible: false, color: Colors.grey),
         opacity: 0.3,
-      ));
-      stackChildren.add(const Center(child: CircularProgressIndicator()));
-    }
+      ),
+    );
+    stackChildren.add(
+      const Center(child: CircularProgressIndicator()),
+    );
+  }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('tflite example app'),
+        title: Text(
+          "TFLite Examples", // AppBar Title
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22.0,
+            fontWeight: FontWeight.bold,
+          ),
+          
+        ),
+        backgroundColor: Colors.teal,
         actions: <Widget>[
           PopupMenuButton<String>(
             onSelected: onSelect,
             itemBuilder: (context) {
               List<PopupMenuEntry<String>> menuEntries = [
                 const PopupMenuItem<String>(
+                  child: Text(deeplab),
+                  value: deeplab,
+                ),
+                const PopupMenuItem<String>(
                   child: Text(mobile),
                   value: mobile,
+                ),
+                const PopupMenuItem<String>(
+                  child: Text(posenet),
+                  value: posenet,
                 ),
                 const PopupMenuItem<String>(
                   child: Text(ssd),
@@ -445,14 +523,8 @@ class _MyAppState extends State<MyApp> {
                   child: Text(yolo),
                   value: yolo,
                 ),
-                const PopupMenuItem<String>(
-                  child: Text(deeplab),
-                  value: deeplab,
-                ),
-                const PopupMenuItem<String>(
-                  child: Text(posenet),
-                  value: posenet,
-                )
+                
+                
               ];
               return menuEntries;
             },
